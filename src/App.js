@@ -27,6 +27,10 @@ export default class GestureControl extends Component {
         this.pgXlast = 0;
         this.pgYlast = 0;
 
+        this.pressing = false;
+        this.firstXY = false;
+        this.firstXYpress = [0, 0];
+        this.eventList = [];
 
     }
 
@@ -52,6 +56,10 @@ export default class GestureControl extends Component {
         } else {
             rotateZ.setValue(valueXY[0] + (pageX - fromXY[0]) / 2);
             rotateX.setValue(valueXY[1] + (pageY - fromXY[1]) / 2);
+        }
+        if (!this.pressing && !this.firstXY) {
+            this.firstXYpress = [rotateX.__getValue(), rotateZ.__getValue()];
+            this.firstXY = true;
         }
     };
 
@@ -115,11 +123,40 @@ export default class GestureControl extends Component {
         }
     };
 
+    _ONPRESS = () => {
+        console.log(this.pressing);
+        if (this.pressing) {
+            this.pressing = false;
+            this.firstXY = false;
+        } else {
+            this.pressing = true;
+
+            const x = Math.abs(Math.abs(this.state.rotateX.__getValue()) - Math.abs(this.firstXYpress[0]));
+            const y = Math.abs(Math.abs(this.state.rotateZ.__getValue()) - Math.abs(this.firstXYpress[1]));
+
+            console.log('X: ' + x + ' Y: ' + y);
+
+            if (x <= 0.5 && y <= 0.5) {
+                alert('clicked\n' +
+                    `x coord = ${this.eventList.locationX}\n` +
+                    `y coord = ${this.eventList.locationY}\n`);
+                // console.log(`x coord = ${evt.nativeEvent.locationX}`);
+            }
+
+        }
+
+    };
+
 
     render() {
         let {rotateZ, rotateX, fromXY} = this.state;
         let {count, timeFirst} = this.state;
 
+        function handlePress(evt) {
+            // console.log(`x coord = ${evt.nativeEvent.locationX}`);
+            console.log(evt.nativeEvent.position);
+
+        }
 
         return (
             <AnimatedModelView
@@ -133,7 +170,12 @@ export default class GestureControl extends Component {
                 onResponderRelease={this.onMoveEnd}
                 onResponderMove={this.onMove}
                 animate={!!fromXY}
-                onClick={this._onTap()}
+                onPress={this._ONPRESS()}
+                // onTouchStart={(e) => {console.log('touchMove',e.nativeEvent)}}
+                onTouchStart={(e) => {
+                    this.eventList = e.nativeEvent;
+                }}
+                // onClick={this._onTap()}
                 tint={{r: 1.0, g: 1.0, b: 1.0, a: 1.0}}
                 scale={0.06}
                 rotateX={rotateX}
