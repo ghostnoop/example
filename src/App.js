@@ -16,6 +16,7 @@ export default class GestureControl extends Component {
             valueXY: undefined,
         };
 
+
         this.Click1 = false;
         this.Click2 = false;
         this.Click3 = false;
@@ -48,69 +49,79 @@ export default class GestureControl extends Component {
         this.pgX = pageX;
         this.pgY = pageY;
 
+
+
         if (!this.state.fromXY) {
             this.setState({
                 fromXY: [pageX, pageY],
                 valueXY: [rotateZ.__getValue(), rotateX.__getValue()],
             });
         } else {
-            rotateZ.setValue(valueXY[0] + (pageX - fromXY[0]) / 2);
-            rotateX.setValue(valueXY[1] + (pageY - fromXY[1]) / 2);
+
+            rotateZ.setValue((valueXY[0] + (pageX - fromXY[0]) / 2));
+            // rotateX.setValue((valueXY[1] + (pageY - fromXY[1]) / 2));
         }
         if (!this.pressing && !this.firstXY) {
             this.firstXYpress = [rotateX.__getValue(), rotateZ.__getValue()];
             this.firstXY = true;
         }
+
     };
 
     _onTap = () => {
-        const delta = 500;
-        const nowtime = new Date().getTime();
+        // const delta = 500;
+        // const nowtime = new Date().getTime();
+        //
+        // if (!this.click1) {
+        //     this.times = new Date().getTime();
+        //     // console.log('click1');
+        //     this.click1 = true;
+        //
+        //     this.pgXlast = this.pgX;
+        //     this.pgYlast = this.pgY;
+        //
+        //     return;
+        // }
+        //
+        // console.log(nowtime - this.times);
+        // if (nowtime - this.times > 500) {
+        //     console.log('reset');
+        //     this.click1 = false;
+        //     this.click2 = false;
+        //     this.click3 = false;
+        //     this.click4 = false;
+        //
+        // }
+        //
+        // if (this.click1) {
+        //     if (!this.click2) {
+        //         // console.log('click2');
+        //         this.click2 = true;
+        //         return;
+        //     }
+        //     if (!this.click3) {
+        //         this.funTODO();
+        //         console.log('click3');
+        //         this.click3 = true;
+        //         return;
+        //     }
+        //     if (!this.click4) {
+        //         console.log('click4');
+        //         this.funTODO();
+        //         this.click1 = false;
+        //         this.click2 = false;
+        //         this.click3 = false;
+        //         this.click4 = false;
+        //         return;
+        //     }
+        // }
 
-        if (!this.click1) {
-            this.times = new Date().getTime();
-            // console.log('click1');
-            this.click1 = true;
-
-            this.pgXlast = this.pgX;
-            this.pgYlast = this.pgY;
-
-            return;
-        }
-
-        console.log(nowtime - this.times);
-        if (nowtime - this.times > 500) {
-            console.log('reset');
-            this.click1 = false;
-            this.click2 = false;
-            this.click3 = false;
-            this.click4 = false;
-
-        }
-
-        if (this.click1) {
-            if (!this.click2) {
-                // console.log('click2');
-                this.click2 = true;
-                return;
-            }
-            if (!this.click3) {
-                this.funTODO();
-                console.log('click3');
-                this.click3 = true;
-                return;
-            }
-            if (!this.click4) {
-                console.log('click4');
-                this.funTODO();
-                this.click1 = false;
-                this.click2 = false;
-                this.click3 = false;
-                this.click4 = false;
-                return;
-            }
-        }
-
+        // let {rotateX, rotateZ, fromXY, valueXY} = this.state;
+        // Animated.timing(rotateZ, {
+        //     toValue: 2 * 180,
+        //     useNativeDriver: true,
+        //     duration: 500,
+        // }).start();
     };
     funTODO = () => {
 
@@ -164,7 +175,7 @@ export default class GestureControl extends Component {
                     uri: 'ball.obj',
                 }}
                 texture={{
-                    uri: 'testv.png',
+                    uri: 'Earth_diff_reverse_v2.jpg',
                 }}
                 onStartShouldSetResponder={() => true}
                 onResponderRelease={this.onMoveEnd}
